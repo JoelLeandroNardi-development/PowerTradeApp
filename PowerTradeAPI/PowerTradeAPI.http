@@ -1,0 +1,11 @@
+@PowerTradeAPI_HostAddress = http://localhost:5253
+
+GET {{PowerTradeAPI_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
+
+GET {{PowerTradeAPI_HostAddress}}/powerposition/csv
+Accept: application/json
+
+###
