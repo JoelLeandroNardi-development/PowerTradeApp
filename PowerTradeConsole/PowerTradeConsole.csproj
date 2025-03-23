@@ -9,4 +9,8 @@
     <InvariantGlobalization>true</InvariantGlobalization>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\PowerTradeCore\PowerTradeCore.csproj" />
+  </ItemGroup>
+
 </Project>
