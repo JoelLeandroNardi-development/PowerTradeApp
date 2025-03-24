@@ -1,2 +1,2 @@
 ﻿namespace PowerTradeCore;
-public record AccumulatedPowerTrade (DateTime Datetime, double Volume);
+public record AccumulatedPowerTrade (string Datetime, double Volume);
