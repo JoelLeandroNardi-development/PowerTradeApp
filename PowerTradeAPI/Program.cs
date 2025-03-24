@@ -9,6 +9,8 @@ builder.Services.AddCoreServices(builder.Configuration);
 
 var app = builder.Build();
 
+app.UseMiddleware<GlobalExceptionHandlerMiddleware>();
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
