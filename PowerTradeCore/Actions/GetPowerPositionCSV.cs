@@ -1,14 +1,15 @@
 ﻿using Axpo;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace PowerTradeCore;
 
 public static class GetPowerPositionCSV
 {
-    public static async Task GenerateCSVAsync([FromServices] IPowerService powerService, string folderPath)
+    public static async Task<IResult> GenerateCSVAsync([FromServices] IPowerService powerService)
     {
-        var data = await PowerPositionService.GetAggregatedPositionsAsync(powerService, DateTime.Now);
-        
-        throw new NotImplementedException();
+        var csv = await PowerPositionService.GetAggregatedPositionsCsvAsync(powerService, DateTime.Now);
+        var csvBytes = System.Text.Encoding.UTF8.GetBytes(csv);
+        return Results.File(csvBytes, "text/csv", CsvGenerator.GenerateCsvFileName(DateTime.Now));
     }
 }
