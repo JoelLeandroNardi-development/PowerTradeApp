@@ -8,7 +8,8 @@ public static class AppBuilderExtension
 {
     public static IServiceCollection AddCoreServices(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddScoped<IPowerService,PowerService>();
+        services.AddSingleton<IPowerService, PowerService>();
+        services.AddHostedService<CsvExtractionWorker>();
         return services;
     }
 }
