@@ -2,9 +2,9 @@
 
 namespace PowerTradeCore;
 
-public static class RecurrentTaskScheduler
+public class RecurrentTaskScheduler : IRecurrentTaskScheduler
 {
-    public static async Task Schedule(int? intervalMinutes, string? folderPath)
+    public async Task Schedule(int? intervalMinutes, string? folderPath)
     {
         var json = await File.ReadAllTextAsync(Constants.FilePath);
         var jsonObject = JsonSerializer.Deserialize<JsonElement>(json);

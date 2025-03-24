@@ -5,9 +5,9 @@ namespace PowerTradeCore;
 
 public static class CsvDownloadTaskScheduler
 {
-    public static async Task<IResult> ScheduleTask([FromBody] TaskSchedulerInput input)
+    public static async Task<IResult> ScheduleTask([FromServices] IRecurrentTaskScheduler recurrentTaskScheduler, [FromBody] TaskSchedulerInput input)
     {
-        await RecurrentTaskScheduler.Schedule(input.IntervalMinutes, input.FolderPath);
+        await recurrentTaskScheduler.Schedule(input.IntervalMinutes, input.FolderPath);
         return Results.Ok("Settings updated successfully!");
     }
 }

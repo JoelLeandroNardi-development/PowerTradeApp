@@ -4,16 +4,16 @@ using System.Globalization;
 
 namespace PowerTradeCore;
 
-public static class CsvGenerator
+public class CsvGenerator : ICsvGenerator
 {
-    public static string GenerateCsvFileName(DateTime dateTime)
+    public string GenerateCsvFileName(DateTime dateTime)
     {
         var dayAhead = dateTime.AddDays(1).ToString("yyyyMMdd");
-        var extractionTimestamp = dateTime.ToString("yyyyMMddHHmm");
+        var extractionTimestamp = dateTime.ToUniversalTime().ToString("yyyyMMddHHmm");
         return $"PowerPosition_{dayAhead}_{extractionTimestamp}.csv";
     }
 
-    public static string GenerateCsvContent(IEnumerable<AccumulatedPowerTrade> data)
+    public string GenerateCsvContent(IEnumerable<AccumulatedPowerTrade> data)
     {
         var config = new CsvConfiguration(CultureInfo.InvariantCulture)
         {

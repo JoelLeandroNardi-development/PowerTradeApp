@@ -1,11 +1,10 @@
 ﻿using Axpo;
-using System.Linq;
 
 namespace PowerTradeCore;
 
-public static class PowerPositionService
+public class PowerPositionService(IPowerService powerService) : IPowerPositionService
 {
-    public static async Task<IEnumerable<AccumulatedPowerTrade>> GetAggregatedPositionsAsync(IPowerService powerService, DateTime startDate)
+    public async Task<IEnumerable<AccumulatedPowerTrade>> GetAggregatedPositionsAsync(DateTime startDate)
     {
         DateTime tradeDate = startDate.AddDays(1);
 

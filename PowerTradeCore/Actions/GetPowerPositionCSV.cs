@@ -6,11 +6,12 @@ namespace PowerTradeCore;
 
 public static class GetPowerPositionCsv
 {
-    public static async Task<IResult> GenerateCSVAsync([FromServices] IPowerService powerService)
+    public static async Task<IResult> GenerateCSVAsync([FromServices] IPowerPositionService powerPositionService, [FromServices] ICsvGenerator csvGenerator)
     {
-        var data = await PowerPositionService.GetAggregatedPositionsAsync(powerService, DateTime.Now);
-        var csv = CsvGenerator.GenerateCsvContent(data);
+        var now = DateTime.Now;
+        var data = await powerPositionService.GetAggregatedPositionsAsync(now);
+        var csv = csvGenerator.GenerateCsvContent(data);
         var csvBytes = System.Text.Encoding.UTF8.GetBytes(csv);
-        return Results.File(csvBytes, "text/csv", CsvGenerator.GenerateCsvFileName(DateTime.UtcNow));
+        return Results.File(csvBytes, "text/csv", csvGenerator.GenerateCsvFileName(now));
     }
 }
