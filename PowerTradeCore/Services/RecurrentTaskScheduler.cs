@@ -4,19 +4,18 @@ namespace PowerTradeCore;
 
 public static class RecurrentTaskScheduler
 {
-    private static string _filePath => "appsettings.json";
     public static async Task Schedule(int? intervalMinutes, string? folderPath)
     {
-        var json = await File.ReadAllTextAsync(_filePath);
+        var json = await File.ReadAllTextAsync(Constants.FilePath);
         var jsonObject = JsonSerializer.Deserialize<JsonElement>(json);
 
         var updatedSettings = new Dictionary<string, object>
         {
-            ["IntervalMinutes"] = intervalMinutes ?? jsonObject.GetProperty("IntervalMinutes").GetInt32(),
-            ["FolderPath"] = folderPath ?? jsonObject.GetProperty("FolderPath").GetString()!
+            [Constants.IntervalMinutes] = intervalMinutes ?? jsonObject.GetProperty(Constants.IntervalMinutes).GetInt32(),
+            [Constants.FolderPath] = folderPath ?? jsonObject.GetProperty(Constants.FolderPath).GetString()!
         };
 
         var updatedJson = JsonSerializer.Serialize(updatedSettings, new JsonSerializerOptions { WriteIndented = true });
-        await File.WriteAllTextAsync(_filePath, updatedJson);
+        await File.WriteAllTextAsync(Constants.FilePath, updatedJson);
     }
 }

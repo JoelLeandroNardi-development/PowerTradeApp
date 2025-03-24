@@ -9,8 +9,8 @@ namespace PowerTradeCore
     public class CsvExtractionWorker(IPowerService powerService, IConfiguration configuration) : BackgroundService
     {
         private readonly IPowerService _powerService = powerService ?? throw new ArgumentNullException(nameof(powerService));
-        private readonly int _intervalMinutes = configuration.GetValue("IntervalMinutes", 5);
-        private readonly string _folderPath = configuration.GetValue<string>("FolderPath") ?? "../extracts/";
+        private readonly int _intervalMinutes = configuration.GetValue(Constants.IntervalMinutes, 5);
+        private readonly string _folderPath = configuration.GetValue<string>(Constants.FolderPath) ?? "../extracts/";
         private readonly AsyncRetryPolicy _retryPolicy = Policy
             .Handle<Exception>()
             .WaitAndRetryAsync(3, attempt => TimeSpan.FromSeconds(30));
