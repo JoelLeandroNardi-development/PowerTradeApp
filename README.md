@@ -20,7 +20,7 @@ To run this application, ensure you have the following installed on your machine
 ### Installation
 1. Clone the repository:
     ```bash
-    git clone https://github.com/yourusername/PowerTradeApp.git
+    git clone https://github.com/JoelLeandroNardi-development/PowerTradeApp.git
     ```
    
 2. Navigate to the project directory:
