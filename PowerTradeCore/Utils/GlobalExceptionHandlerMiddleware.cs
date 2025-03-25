@@ -13,6 +13,7 @@ public class GlobalExceptionHandlerMiddleware(RequestDelegate next, ILogger<Glob
         }
         catch (Exception ex)
         {
+            logger.LogError($"An error occurred: {ex.Message}");
             await HandleExceptionAsync(httpContext, ex);
         }
     }

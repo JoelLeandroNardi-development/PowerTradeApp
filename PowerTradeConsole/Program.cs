@@ -1,6 +1,7 @@
 ﻿using PowerTradeCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 
 var configuration = new ConfigurationBuilder()
     .SetBasePath(Path.GetFullPath("../../../../PowerTradeAPI"))
@@ -9,13 +10,16 @@ var configuration = new ConfigurationBuilder()
 
 var services = new ServiceCollection();
 services.AddSingleton<IConfiguration>(configuration);
-services.AddCoreServices();
+services.AddCoreServices(true);
 var serviceProvider = services.BuildServiceProvider();
+var logger = serviceProvider.GetRequiredService<ILogger<Program>>();
+logger.LogInformation("Console app started.");
 var csvExtractor = serviceProvider.GetRequiredService<ICsvExtractor>();
 var iRecurrentTaskScheduler = serviceProvider.GetRequiredService<IRecurrentTaskScheduler>();
 
 while (true)
 {
+    logger.LogInformation("Displaying menu to user.");
     Console.WriteLine("Welcome to the Power Position CSV Downloader.");
     Console.WriteLine("============================================================");
     Console.WriteLine("Select an option:");
@@ -57,11 +61,11 @@ while (true)
             break;
 
         case "5":
-            Console.WriteLine("Exiting...");
-            Environment.Exit(0);
+            logger.LogInformation("Exiting application...");
             return;
 
         default:
+            logger.LogWarning("Invalid choice. User input was invalid.");
             Console.WriteLine("Invalid choice. Please try again.");
             break;
     }

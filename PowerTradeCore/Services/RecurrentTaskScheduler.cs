@@ -1,8 +1,9 @@
-﻿using System.Text.Json;
+﻿using Microsoft.Extensions.Logging;
+using System.Text.Json;
 
 namespace PowerTradeCore;
 
-public class RecurrentTaskScheduler : IRecurrentTaskScheduler
+public class RecurrentTaskScheduler(ILogger<RecurrentTaskScheduler> logger) : IRecurrentTaskScheduler
 {
     public async Task Schedule(int? intervalMinutes, string? folderPath) => 
         await ChangeSettings(intervalMinutes, folderPath, Constants.FilePath);
@@ -10,8 +11,9 @@ public class RecurrentTaskScheduler : IRecurrentTaskScheduler
     public async Task ScheduleFromConsole(int? intervalMinutes, string? folderPath) =>
         await ChangeSettings(intervalMinutes, folderPath, Constants.FromConsolePath + Constants.FilePath);
 
-    private static async Task ChangeSettings(int? intervalMinutes, string? folderPath, string path)
+    private async Task ChangeSettings(int? intervalMinutes, string? folderPath, string path)
     {
+        logger.LogInformation("Changing settings.");
         var json = await File.ReadAllTextAsync(path);
         var jsonObject = JsonSerializer.Deserialize(json, AppSettingsJsonContext.Default.TaskSchedulerInput);
         var settings = new TaskSchedulerInput(
@@ -19,5 +21,6 @@ public class RecurrentTaskScheduler : IRecurrentTaskScheduler
             folderPath ?? jsonObject!.FolderPath);
         var updatedJson = JsonSerializer.Serialize(settings, AppSettingsJsonContext.Default.TaskSchedulerInput);
         await File.WriteAllTextAsync(path, updatedJson);
+        logger.LogInformation("Settings changed.");
     }
 }
