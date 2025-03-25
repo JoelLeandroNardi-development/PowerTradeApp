@@ -4,7 +4,7 @@ public static class MenuScreener
 {
     public static void Run()
     {
-        Console.WriteLine("Welcome to the Power Position CSV Downloader.");
+        Console.WriteLine("Welcome to the PowerTradeApp.");
         Console.WriteLine("============================================================");
         Console.WriteLine("Select an option:");
         Console.WriteLine("1 - Download CSV to the default folder (set in configuration file)");
