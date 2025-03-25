@@ -5,8 +5,7 @@ using Polly.Retry;
 
 namespace PowerTradeCore
 {
-    public class CsvExtractionWorker(IPowerPositionService powerPositionService, 
-                                     ICsvGenerator csvGenerator, 
+    public class CsvExtractionWorker(ICsvExtractor csvExtractor,
                                      IConfiguration configuration) : BackgroundService
     {
         private readonly int _intervalMinutes = configuration.GetValue(Constants.IntervalMinutes, 5);
@@ -23,7 +22,7 @@ namespace PowerTradeCore
             {
                 await _retryPolicy.ExecuteAsync(async () =>
                 {
-                    await ProcessCsvExtractionAsync(stoppingToken);
+                    await csvExtractor.ProcessCsvExtractionAsync(_folderPath, stoppingToken);
                 });
 
                 await Task.Delay(TimeSpan.FromMinutes(_intervalMinutes), stoppingToken);
@@ -31,19 +30,5 @@ namespace PowerTradeCore
 
             Console.WriteLine("CSV Extraction Worker stopped.");
         }
-
-        private async Task ProcessCsvExtractionAsync(CancellationToken stoppingToken)
-        {
-            string filePath = Path.Combine(_folderPath, csvGenerator.GenerateCsvFileName(DateTime.UtcNow));
-            Directory.CreateDirectory(_folderPath);
-
-            var data = await powerPositionService.GetAggregatedPositionsAsync(DateTime.UtcNow);
-
-            await SaveCsvToFileAsync(filePath, csvGenerator.GenerateCsvContent(data), stoppingToken);
-            Console.WriteLine($"[{DateTime.UtcNow:O}] CSV saved: {filePath}");
-        }
-
-        private static async Task SaveCsvToFileAsync(string filePath, string content, CancellationToken cancellationToken) =>
-            await File.WriteAllTextAsync(filePath, content, cancellationToken);
     }
 }

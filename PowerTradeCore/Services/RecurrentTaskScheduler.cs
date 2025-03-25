@@ -4,18 +4,20 @@ namespace PowerTradeCore;
 
 public class RecurrentTaskScheduler : IRecurrentTaskScheduler
 {
-    public async Task Schedule(int? intervalMinutes, string? folderPath)
+    public async Task Schedule(int? intervalMinutes, string? folderPath) => 
+        await ChangeSettings(intervalMinutes, folderPath, Constants.FilePath);
+
+    public async Task ScheduleFromConsole(int? intervalMinutes, string? folderPath) =>
+        await ChangeSettings(intervalMinutes, folderPath, Constants.FromConsolePath + Constants.FilePath);
+
+    private static async Task ChangeSettings(int? intervalMinutes, string? folderPath, string path)
     {
-        var json = await File.ReadAllTextAsync(Constants.FilePath);
-        var jsonObject = JsonSerializer.Deserialize<JsonElement>(json);
-
-        var updatedSettings = new Dictionary<string, object>
-        {
-            [Constants.IntervalMinutes] = intervalMinutes ?? jsonObject.GetProperty(Constants.IntervalMinutes).GetInt32(),
-            [Constants.FolderPath] = folderPath ?? jsonObject.GetProperty(Constants.FolderPath).GetString()!
-        };
-
-        var updatedJson = JsonSerializer.Serialize(updatedSettings, new JsonSerializerOptions { WriteIndented = true });
-        await File.WriteAllTextAsync(Constants.FilePath, updatedJson);
+        var json = await File.ReadAllTextAsync(path);
+        var jsonObject = JsonSerializer.Deserialize(json, AppSettingsJsonContext.Default.TaskSchedulerInput);
+        var settings = new TaskSchedulerInput(
+            intervalMinutes ?? jsonObject!.IntervalMinutes,
+            folderPath ?? jsonObject!.FolderPath);
+        var updatedJson = JsonSerializer.Serialize(settings, AppSettingsJsonContext.Default.TaskSchedulerInput);
+        await File.WriteAllTextAsync(path, updatedJson);
     }
 }
