@@ -16,7 +16,6 @@ public static class AppBuilderExtension
                 rollingInterval: RollingInterval.Day) 
             .CreateLogger();
 
-        // Add logging to the DI container
         services.AddLogging(builder =>
         {
             builder.AddSerilog();

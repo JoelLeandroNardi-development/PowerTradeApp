@@ -1,8 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.AspNetCore.Mvc;
 using Moq;
 using PowerTradeCore;
-using System.Text;
 
 namespace PowerTradeTests;
 
@@ -15,7 +13,7 @@ public class GetPowerPositionCsvTests
         var mockPowerPositionService = new Mock<IPowerPositionService>();
         var mockCsvGenerator = new Mock<ICsvGenerator>();
         var now = DateTime.Now;
-        var mockData = new List<AccumulatedPowerTrade>{ new(now.ToString(), 100) };
+        var mockData = TestDataProvider.TestData;
         mockPowerPositionService
             .Setup(service => service.GetAggregatedPositionsAsync(It.IsAny<DateTime>()))
             .ReturnsAsync(mockData);
@@ -39,10 +37,7 @@ public class GetPowerPositionCsvTests
         var mockPowerPositionService = new Mock<IPowerPositionService>();
         var mockCsvGenerator = new Mock<ICsvGenerator>();
         var now = DateTime.Now;
-        var mockData = new List<AccumulatedPowerTrade>
-        {
-            new(now.ToString(), 100)
-        };
+        var mockData = TestDataProvider.TestData;
         mockPowerPositionService
             .Setup(service => service.GetAggregatedPositionsAsync(now))
             .ReturnsAsync(mockData);

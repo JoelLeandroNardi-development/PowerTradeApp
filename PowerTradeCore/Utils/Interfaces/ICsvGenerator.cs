@@ -1,8 +1,7 @@
-﻿namespace PowerTradeCore
+﻿namespace PowerTradeCore;
+
+public interface ICsvGenerator
 {
-    public interface ICsvGenerator
-    {
-        string GenerateCsvContent(IEnumerable<AccumulatedPowerTrade> data);
-        string GenerateCsvFileName(DateTime dateTime);
-    }
+    string GenerateCsvContent(IEnumerable<AccumulatedPowerTrade> data);
+    string GenerateCsvFileName(DateTime dateTime);
 }

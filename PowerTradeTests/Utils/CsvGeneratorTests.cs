@@ -24,14 +24,7 @@ public class CsvGeneratorTests
     public void GenerateCsvContent_ShouldGenerateValidCsv()
     {
         // Arrange
-        DateTime now = DateTime.UtcNow;
-        var hour1 = now.AddHours(1).ToString();
-        var hour2 = now.AddHours(2).ToString();
-        var data = new List<AccumulatedPowerTrade>
-        {
-            new(hour1, 100.5),
-            new(hour2, 200.75)
-        };
+        var data = TestDataProvider.TestData;
 
         // Act
         var csvContent = _subject.GenerateCsvContent(data);
@@ -39,7 +32,7 @@ public class CsvGeneratorTests
         // Assert
         Assert.NotNull(csvContent);
         Assert.Contains("Datetime;Volume", csvContent);
-        Assert.Contains($"{hour1};100.5", csvContent);
-        Assert.Contains($"{hour2};200.75", csvContent);
+        Assert.Contains($"{TestDataProvider.Hour1};100.5", csvContent);
+        Assert.Contains($"{TestDataProvider.Hour2};200.75", csvContent);
     }
 }
